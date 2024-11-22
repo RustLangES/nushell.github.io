@@ -1,53 +1,53 @@
-# Installing Nu
+# Instalación de Nu
 
-There are lots of ways to get Nu up and running. You can download pre-built binaries from our [release page](https://github.com/nushell/nushell/releases), [use your favourite package manager](https://repology.org/project/nushell/versions), or build from source.
+Existen muchas maneras de instalar y ejecutar Nu. Puedes descargar binarios precompilados (pre-built binaries) desde nuestra [página de releases](https://github.com/nushell/nushell/releases), [usar tu gestor de paquetes favorito (package manager)](https://repology.org/project/nushell/versions) o compilar desde el código fuente.
 
-The main Nushell binary is named `nu` (or `nu.exe` on Windows). After installation, you can launch it by typing `nu`.
+El binario principal de Nushell se llama `nu` (o `nu.exe` en Windows). Después de la instalación, puedes iniciarlo escribiendo `nu`.
 
 @[code](@snippets/installation/run_nu.sh)
 
 [[toc]]
 
-## Pre-built Binaries
+## Binarios Precompilados (Pre-built Binaries)
 
-Nu binaries are published for Linux, macOS, and Windows [with each GitHub release](https://github.com/nushell/nushell/releases). Just download, extract the binaries, then copy them to a location on your PATH.
+Los binarios de Nu están publicados para Linux, macOS y Windows [en cada release de GitHub](https://github.com/nushell/nushell/releases). Simplemente descárgalos, extrae los binarios y cópialos a una ubicación que esté en tu PATH.
 
-## Package Managers
+## Gestores/Administradores de Paquetes (Package Managers)
 
-Nu is available via several package managers:
+Nu está disponible a través de varios gestores de paquetes:
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/nushell.svg)](https://repology.org/project/nushell/versions)
 
-For macOS and Linux, [Homebrew](https://brew.sh/) is a popular choice (`brew install nushell`).
+Para macOS y Linux, [Homebrew](https://brew.sh/) es una opción popular (`brew install nushell`).
 
-For Windows:
+Para Windows:
 
 - [Winget](https://docs.microsoft.com/en-us/windows/package-manager/winget/) (`winget install nushell`)
 - [Chocolatey](https://chocolatey.org/) (`choco install nushell`)
 - [Scoop](https://scoop.sh/) (`scoop install nu`)
 
-Cross Platform installation:
+Para instalación multiplataforma (Cross Platform):
 
-- [npm](https://www.npmjs.com/) (`npm install -g nushell` Note that nu plugins are not included if you install in this way)
+- [npm](https://www.npmjs.com/) (`npm install -g nushell` Nota: los plugins de Nu no están incluidos si instalas de esta forma.)
 
-## Docker Container Images
+## Imágenes de Contenedores Docker (Docker Container Images)
 
-Docker images are available from the GitHub Container Registry. An image for the latest release is built regularly
-for Alpine and Debian. You can run the image in interactive mode using:
+Las imágenes Docker están disponibles en el Registro de Contenedores de GitHub (GitHub Container Registry). Hay imágenes para las versiones más recientes (latest release) de Alpine y Debian.
+Puedes ejecutar la imagen en modo interactivo usando:
 
 ```nu
 docker run -it --rm ghcr.io/nushell/nushell:<version>-<distro>
 ```
 
-Where `<version>` is the version of Nushell you want to run and `<distro>` is `alpine` or the latest supported Debian release, such as `bookworm`.
+Donde `<version>` es la versión de Nushell que quieres ejecutar y `<distro>` es `alpine` o la última versión soportada de Debian, como `bookworm`.
 
-To run a specific command, use:
+Para ejecutar un comando específico:
 
 ```nu
 docker run --rm ghcr.io/nushell/nushell:latest-alpine -c "ls /usr/bin | where size > 10KiB"
 ```
 
-To run a script from the current directory using Bash, use:
+Para ejecutar un script desde el directorio actual usando Bash:
 
 ```nu
 docker run --rm \
@@ -56,76 +56,76 @@ docker run --rm \
     "/work/script.nu"
 ```
 
-## Build from Source
+## Compilación desde el Código Fuente (Build from Source)
 
-You can also build Nu from source. First, you will need to set up the Rust toolchain and its dependencies.
+También puedes compilar Nu desde el código fuente. Primero necesitas configurar el entorno de herramientas de Rust y sus dependencias (dependencies).
 
-### Installing a Compiler Suite
+### Instalación de un Conjunto de Compiladores (Compiler Suite)
 
-For Rust to work properly, you'll need to have a compatible compiler suite installed on your system. These are the recommended compiler suites:
+Para que Rust funcione correctamente, necesitarás un conjunto de compiladores compatible. Estas son las opciones recomendadas:
 
-- Linux: GCC or Clang
-- macOS: Clang (install Xcode)
-- Windows: MSVC (install [Visual Studio](https://visualstudio.microsoft.com/vs/community/) or the [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022))
-  - Make sure to install the "Desktop development with C++" workload
-  - Any Visual Studio edition will work (Community is free)
+- Linux: GCC o Clang
+- macOS: Clang (instala Xcode)
+- Windows: MSVC (instala [Visual Studio](https://visualstudio.microsoft.com/vs/community/) or the [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022))
+   - Asegúrate de instalar la carga de trabajo  "Desarrollo de escritorio con C++" (Desktop development with C++ workload).
+  - Cualquier edición de Visual Studio funcionará (la edición Community es gratuita)
 
-### Installing Rust
+### Instalación de Rust
 
-If you don't already have Rust on our system, the best way to install it is via [rustup](https://rustup.rs/). Rustup is a way of managing Rust installations, including managing using different Rust versions.
+Si no tienes Rust instalado, la mejor manera es a través de [rustup](https://rustup.rs/). Rustup es una forma de gestionar instalaciones de Rust, incluyendo la gestión del uso de diferentes versiones de Rust.
 
-Nu currently requires the **latest stable (1.66.1 or later)** version of Rust. The best way is to let `rustup` find the correct version for you. When you first open `rustup` it will ask what version of Rust you wish to install:
+Nu requiere la **versión estable más reciente (1.66.1 o posterior)** de Rust. La mejor manera es dejar que `rustup` encuentre la versión correcta para usted.La primera vez que abras `rustup` te preguntará qué versión de Rust deseas instalar:
 
 @[code](@snippets/installation/rustup_choose_rust_version.sh)
 
-Once you are ready, press 1 and then enter.
+Cuando esté listo, pulse 1 y, a continuación, enter.
 
-If you'd rather not install Rust via `rustup`, you can also install it via other methods (e.g. from a package in a Linux distro). Just be sure to install a version of Rust that is 1.66.1 or later.
+Si prefieres no instalar Rust a través de `rustup`, también puedes instalarlo a través de otros métodos (por ejemplo, desde un paquete (package) en una distribución Linux). Sólo asegúrate de instalar una versión de Rust que sea 1.66.1 o posterior.
 
-### Dependencies
+### Dependencias (Dependencies)
 
 #### Debian/Ubuntu
 
-You will need to install the "pkg-config", "build-essential" and "libssl-dev" packages:
+Necesitará instalar los paquetes "pkg-config", "build-essential" y "libssl-dev":
 
 @[code](@snippets/installation/install_pkg_config_libssl_dev.sh)
 
-#### RHEL based distros
+#### Distribuciones basadas en RHEL
 
-You will need to install "libxcb", "openssl-devel" and "libX11-devel":
+Necesitarás instalar "libxcb", "openssl-devel" y "libX11-devel":
 
 @[code](@snippets/installation/install_rhel_dependencies.sh)
 
 #### macOS
 
-Using [Homebrew](https://brew.sh/), you will need to install "openssl" and "cmake" using:
+Usando [Homebrew](https://brew.sh/), instala `openssl` y `cmake`:
 
 @[code](@snippets/installation/macos_deps.sh)
 
-### Build from [crates.io](https://crates.io) using Cargo
+### Compilación (Build) desde [crates.io](https://crates.io) usando Cargo
 
-Nushell releases are published as source to the popular Rust package registry [crates.io](https://crates.io/). This makes it easy to build and install the latest Nu release with `cargo`:
+Los lanzamientos (releases) de Nushell están publicados (published) en el registro de paquetes Rust (Rust package registry) [crates.io](https://crates.io/). Esto facilita la creación e instalación de la última versión de Nu con `cargo`:
 
 ```nu
 cargo install nu
 ```
 
-The `cargo` tool will do the work of downloading Nu and its source dependencies, building it, and installing it into the cargo bin path.
+La herramienta `cargo` realizará el trabajo de descargar Nu y sus dependencias de origen, compilarlo e instalarlo en la ruta del contenedor de carga.
 
-Note that the default plugins must be installed separately when using `cargo`. See the [Plugins Installation](./plugins.html#core-plugins) section of the Book for instructions.
+Nota: los plugins predeterminados deben instalarse por separado al usar `cargo`. Consulta la sección [Plugins Installation](./plugins.html#core-plugins) del libro para más detalles.
 
-### Building from the GitHub repository
+### Construcción desde el repositorio de GitHub (Building from the GitHub repository)
 
-You can also build Nu from the latest source on GitHub. This gives you immediate access to the latest features and bug fixes. First, clone the repo:
+También puedes compilar Nu desde el código fuente más reciente en GitHub. Esto te da acceso inmediato a las últimas características (features) y correcciones (bug fixes). Primero, clona el repositorio:
 
 @[code](@snippets/installation/git_clone_nu.sh)
 
-From there, we can build and run Nu with:
+Luego, compila (build) y ejecuta (run) Nu:
 
 @[code](@snippets/installation/build_nu_from_source.sh)
 
-You can also build and run Nu in release mode, which enables more optimizations:
+También puedes compilar y ejecutar Nu en modo de lanzamiento, lo que permite más optimizaciones:
 
 @[code](@snippets/installation/build_nu_from_source_release.sh)
 
-People familiar with Rust may wonder why we do both a "build" and a "run" step if "run" does a build by default. This is to get around a shortcoming of the new `default-run` option in Cargo, and ensure that all plugins are built, though this may not be required in the future.
+Las personas familiarizadas con Rust pueden preguntarse por qué hacemos un paso de "compilación" (build) y otro de "ejecución" (run) si "ejecutar" hace una compilación por defecto. Esto es para evitar una deficiencia de la nueva opción `default-run` en Cargo, y asegurar que todos los plugins se construyen, aunque esto puede no ser necesario en el futuro.
