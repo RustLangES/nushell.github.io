@@ -38,7 +38,7 @@ El proyecto Nushell consta de múltiples repositorios y subproyectos. Puedes enc
 - [Nu Showcase](https://github.com/nushell/showcase) es un lugar para compartir trabajos relacionados con Nushell, ya sean blogs, arte o cualquier otra cosa.
 - [Request for Comment (RFC)](https://github.com/nushell/rfcs) sirve como un lugar para proponer y discutir cambios de diseño importantes. Aunque actualmente está subutilizado, esperamos usarlo más a medida que nos acerquemos y avancemos más allá de la versión 1.0.
 
-## Contribuir
+## Contribuyendo
 
 ¡Aceptamos contribuciones!
 [As you can see](#the-many-parts-of-nushell), como puedes ver, hay muchos lugares donde puedes contribuir.
