@@ -1,4 +1,4 @@
-# Instalación de Nu
+# Instalando Nu
 
 Existen muchas maneras de instalar y ejecutar Nu. Puedes descargar binarios precompilados (pre-built binaries) desde nuestra [página de releases](https://github.com/nushell/nushell/releases), [usar tu gestor de paquetes favorito (package manager)](https://repology.org/project/nushell/versions) o compilar desde el código fuente.
 
