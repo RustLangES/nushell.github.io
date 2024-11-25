@@ -1,7 +1,7 @@
-# Getting Started
+# Primeros Pasos
 
-Let's get started! :elephant:
+¡Empecemos! :elephant:
 
-The next sections will give you a [short tour of Nushell by example](quick_tour.md) (including how to get help from within Nushell) and show you how to [move around your file system](moving_around.md).
+Las siguientes secciones te ofrecerán un [breve recorrido por Nushell con ejemplos](quick_tour.md) (incluyendo cómo obtener ayuda dentro de Nushell) y te mostrarán cómo [navegar por tu sistema de archivos](moving_around.md).
 
-Then, because Nushell takes some design decisions that are quite different from typical shells or dynamic scripting languages, make sure to check out [Thinking in Nu](thinking_in_nu.md) where we explain some of these concepts.
+Luego, dado que Nushell toma decisiones de diseño bastante diferentes a las de los shells típicos o lenguajes de scripting dinámicos, asegúrate de revisar [Pensando en Nu](thinking_in_nu.md), donde explicamos algunos de estos conceptos.
