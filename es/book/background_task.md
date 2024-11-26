@@ -1,34 +1,34 @@
-# Background Tasks with Nu
+# Tareas de Fondo con Nu
 
-Currently, Nushell doesn't have built-in background task management feature, but you can make it "support" background task with some tools, here are some examples:
+Actualmente, Nushell no tiene una función integrada de gestión de tareas en segundo plano, pero puedes hacerlo "soportar" tareas en segundo plano con algunas herramientas, aquí algunos ejemplos:
 
-1. Using a third-party task management tools, like [pueue](https://github.com/Nukesor/pueue)
-2. Using a terminal multiplexer, like [tmux](https://github.com/tmux/tmux/wiki) or [zellij](https://zellij.dev/)
+1. Usando una herramienta de gestión de tareas de terceros, como [pueue](https://github.com/Nukesor/pueue)
+2. Usando un multiplexor de terminal, como [tmux](https://github.com/tmux/tmux/wiki) or [zellij](https://zellij.dev/)
 
-## Using Nu With Pueue
+## Usando Nu Con Pueue
 
-The module borrows the power of [pueue](https://github.com/Nukesor/pueue), it is possible to schedule background tasks to pueue, and manage those tasks (such as viewing logs, killing tasks, or getting the running status of all tasks, creating groups, pausing tasks etc etc)
+El módulo toma prestado el poder de [pueue](https://github.com/Nukesor/pueue), es posible programar tareas en segundo plano a pueue, y gestionar esas tareas (como ver logs, matar tareas, o obtener el estado de ejecución de todas las tareas, crear grupos, pausar tareas, etc)
 
-Unlike terminal multiplexer, you don't need to attach to multiple tmux sessions, and get task status easily.
+A diferencia de un multiplexor de terminal, no necesitas conectarte a múltiples sesiones de tmux, y obtener el estado de la tarea fácilmente.
 
-Here we provide a [nushell module](https://github.com/nushell/nu_scripts/tree/main/modules/background_task) that makes working with pueue easier.
+Aquí ofrecemos un [nushell module](https://github.com/nushell/nu_scripts/tree/main/modules/background_task) que facilita el trabajo con pueue.
 
-Here is a setup example to make Nushell "support" background tasks:
+Este es un ejemplo de configuración para hacer que Nushell "soporte" tareas en segundo plano:
 
-1. Install pueue
-2. run `pueued`, you can refer to [start-the-daemon page](https://github.com/Nukesor/pueue/wiki/Get-started#start-the-daemon) for more information.
-3. Put the [task.nu](https://github.com/nushell/nu_scripts/blob/main/modules/background_task/task.nu) file under `$env.NU_LIB_DIRS`.
-4. Add a line to the `$nu.config-path` file: `use task.nu`
-5. Restart Nushell.
+1. Instalar pueue
+2. Ejecuta `pueued`, puedes consultar en [start-the-daemon page](https://github.com/Nukesor/pueue/wiki/Get-started#start-the-daemon) para más información.
+3. Pon el archivo [task.nu](https://github.com/nushell/nu_scripts/blob/main/modules/background_task/task.nu) bajo `$env.NU_LIB_DIRS`.
+4. Añade una linea al archivo `$nu.config-path`: `use task.nu`
+5. Reinicia Nushell.
 
-Then you will get some commands to schedule background tasks. (e.g: `task spawn`, `task status`, `task log`)
+Luego vas a tener algunos comandos para programar tareas en segundo plano. (Ej: `task spawn`, `task status`, `task log`)
 
-Cons: It spawns a new Nushell interpreter to execute every single task, so it doesn't inherit current scope's variables, custom commands, alias definition.
-It only inherits environment variables whose value can be converted to a string.
-Therefore, if you want to use custom commands or variables, you have to [`use`](/commands/docs/use.md) or [`def`](/commands/docs/def.md) them within the given block.
+Cons: Genera un nuevo intérprete de Nushell para ejecutar cada tarea, así que no hereda las variables del scope actual, comandos personalizados, definición de alias.
+Solo hereda las variables de entorno cuyo valor puede ser convertido a un string.
+Por lo tanto, si quieres usar comandos personalizados o variables, tienes que [`use`](/commands/docs/use.md) o [`def`](/commands/docs/def.md) dentro del bloque dado. 
 
-## Using Nu With Terminal Multiplexer
+## Usando Nu con un Multiplexor de Terminal
 
-You can choose and install a terminal multiplexer and use it.
+Puedes elegir e instalar un multiplexor de terminal y utilizarlo.
 
-It allows you to easily switch between multiple programs in one terminal, detach them (they continue to run in the background) and reconnect them to a different terminal.  As a result, it is very flexible and usable.
+Permite cambiar fácilmente entre múltiples programas en una terminal, desconectarlos (continúan ejecutándose en segundo plano) y reconectarlos en una terminal diferente. Como resultado, es muy flexible y utilizable.
