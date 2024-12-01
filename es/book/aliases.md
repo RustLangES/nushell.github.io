@@ -1,35 +1,35 @@
 # Aliases
 
-Aliases in Nushell offer a way of doing a simple replacement of command calls (both external and internal commands). This allows you to create a shorthand name for a longer command, including its default arguments.
+Los Aliases en Nushell ofrecen una manera de hacer un reemplazo simple de las llamadas de comando (comandos externos e internos). Esto te permite crear un nombre de atajo para un comando más largo, incluyendo sus argumentos por defecto.
 
-For example, let's create an alias called `ll` which will expand to `ls -l`.
+Por ejemplo, vamos a crear un alias llamado `ll` el cual se expandirá a `ls -l`.
 
 ```nu
 > alias ll = ls -l
 ```
 
-We can now call this alias:
+Ahora podemos llamar este alias:
 
 ```nu
 > ll
 ```
 
-Once we do, it's as if we typed `ls -l`. This also allows us to pass in flags or positional parameters. For example, we can now also write:
+Una vez lo hacemos, es como si hubieramos escrito `ls -l`. Esto también nos permite pasar flags o parámetros posicionales. Por ejemplo, también podemos escribir:
 
 ```nu
 > ll -a
 ```
 
-And get the equivalent to having typed `ls -l -a`.
+Y obtener el equivalente a haber escrito `ls -l -a`.
 
-## List All Loaded Aliases
+## Listar todos los Aliases cargados
 
-Your useable aliases can be seen in `scope aliases` and `help aliases`.
+Tus aliases utilizables pueden verse en `scope aliases` y `help aliases`.
 
-## Persisting
+## Persistencia
 
-To make your aliases persistent they must be added to your _config.nu_ file by running `config nu` to open an editor and inserting them, and then restarting nushell.
-e.g. with the above `ll` alias, you can add `alias ll = ls -l` anywhere in _config.nu_
+Para hacer tus aliases persistentes, deben ser añadidos a tu archivo _config.nu_ ejecutando `config nu` para abrir un editor e insertarlos, y luego reiniciando nushell.
+Ej. con el anterior `ll` alias, puedes añadir `alias ll = ls -l` en cualquier parte de _config.nu_
 
 ```nu
 $env.config = {
@@ -41,41 +41,41 @@ alias ll = ls -l
 # some other config and script loading
 ```
 
-## Piping in Aliases
+## Piping en Aliases
 
-Note that `alias uuidgen = uuidgen | tr A-F a-f` (to make uuidgen on mac behave like linux) won't work.
-The solution is to define a command without parameters that calls the system program `uuidgen` via `^`.
+Tenga en cuenta que `alias uuidgen = uuidgen | tr A-F a-f` (para hacer que uuidgen en mac se comporte como en linux) no funcionará.
+La solución es definir un comando sin parámetros que llame al programa del sistema `uuidgen` a través de `^`.
 
 ```nu
 def uuidgen [] { ^uuidgen | tr A-F a-f }
 ```
 
-See more in the [custom commands](custom_commands.md) section of this book.
+Ver más en esta [custom commands](custom_commands.md) sección de este libro.
 
-Or a more idiomatic example with nushell internal commands
+O un ejemplo más idiomático con comandos internos de nushell
 
 ```nu
 def lsg [] { ls | sort-by type name -i | grid -c | str trim }
 ```
 
-displaying all listed files and folders in a grid.
+mostrando todos los archivos y carpetas listados en una cuadrícula.
 
 ## Replacing Existing Commands Using Aliases
 
-::: warning Caution!
-When replacing commands it is best to "back up" the command first and avoid recursion error.
+::: warning Cuidado!
+Al sustituir comandos, es mejor hacer primero un "back up" del comando y evitar el error de recursión.
 :::
 
-How to back up a command like `ls`:
+Cómo hacer back up a un comando como `ls`:
 
 ```nu
 alias core-ls = ls    # This will create a new alias core-ls for ls
 ```
 
-Now you can use `core-ls` as `ls` in your nu-programming. You will see further down how to use `core-ls`.
+Ahora puedes usar `core-ls` como `ls` en tu programación-nu. Verás más abajo cómo usar `core-ls`.
 
-The reason you need to use alias is because, unlike `def`, aliases are position-dependent. So, you need to "back up" the old command first with an alias, before re-defining it.
-If you do not backup the command and you replace the command using `def` you get a recursion error.
+La razón por la que necesitas usar un alias es porque, a diferencia de `def`, los aliases son dependientes de la posición. Por lo tanto, necesitas un "back up" del comando antiguo primero con un alias, antes de redefinirlo.
+Si no haces un backup del comando y reemplazas el comando usando `def` vas a tener un error de recursión.
 
 ```nu
 def ls [] { ls }; ls    # Do *NOT* do this! This will throw a recursion error
@@ -92,8 +92,8 @@ def ls [] { ls }; ls    # Do *NOT* do this! This will throw a recursion error
 #     ╰────
 ```
 
-The recommended way to replace an existing command is to shadow the command.
-Here is an example shadowing the `ls` command.
+La manera recomendada para sustituir un comando existente es hacer shadow al comando.
+Este es un ejemplo de shadowing al comando `ls`.
 
 ```nu
 # An escape hatch to have access to the original ls command
