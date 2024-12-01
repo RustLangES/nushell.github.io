@@ -1,20 +1,20 @@
-# Nu Fundamentals
+# Fundamentos de Nushell
 
-This chapter explains some of the fundamentals of the Nushell programming language.
-After going through it, you should have an idea how to write simple Nushell programs.
+Este capítulo explica algunos de los fundamentos del lenguaje de programación Nushell.  
+Después de revisarlo, deberías tener una idea de cómo escribir programas simples en Nushell.
 
-Nushell has a rich type system.
-You will find typical data types such as strings or integers and less typical data types, such as cell paths.
-Furthermore, one of the defining features of Nushell is the notion of _structured data_ which means that you can organize types into collections: lists, records, or tables.
-Contrary to the traditional Unix approach where commands communicate via plain text, Nushell commands communicate via these data types.
-All of the above is explained in [Types of Data](types_of_data.md).
+Nushell tiene un sistema de tipos rico.  
+Encontrarás tipos de datos (data types) típicos como cadenas de texto (strings) o enteros (integers), y otros menos comunes, como rutas de celdas (cell paths).  
+Además, una de las características principales de Nushell es la noción de _datos estructurados_ (structured data), lo que significa que puedes organizar los tipos en colecciones: listas (lists), registros (records) o tablas (tables).  
+A diferencia del enfoque tradicional de Unix, donde los comandos se comunican a través de texto plano, los comandos de Nushell se comunican mediante estos tipos de datos.  
+Todo lo anterior se explica en [Tipos de Datos](types_of_data.md).
 
-[Loading Data](loading_data.md) explains how to read common data formats, such as JSON, into _structured data_. This includes our own "NUON" data format.
+[Carga de Datos](loading_data.md) explica cómo leer formatos de datos comunes, como JSON, y convertirlos en _datos estructurados_. Esto incluye nuestro propio formato de datos "NUON".
 
-Just like Unix shells, Nushell commands can be composed into [pipelines](pipelines.md) to pass and modify a stream of data.
+Al igual que los shells de Unix, los comandos de Nushell pueden componerse en [pipelines](pipelines.md) para pasar y modificar un flujo de datos (stream of data).
 
-Some data types have interesting features that deserve their own sections: [strings](working_with_strings.md), [lists](working_with_lists.md), and [tables](working_with_tables.md).
-Apart from explaining the features, these sections also show how to do some common operations, such as composing strings or updating values in a list.
+Algunos tipos de datos tienen características interesantes que merecen sus propias secciones: [cadenas de texto](working_with_strings.md), [listas](working_with_lists.md) y [tablas](working_with_tables.md).  
+Además de explicar estas características, estas secciones también muestran cómo realizar operaciones comunes, como componer cadenas de texto o actualizar valores en una lista.
 
-Finally, [Command Reference](/commands/) lists all the built-in commands with brief descriptions.
-Note that you can also access this info from within Nushell using the [`help`](/commands/docs/help.md) command.
+Por último, la [Referencia de Comandos](/commands/) enumera todos los comandos integrados con descripciones breves.  
+Ten en cuenta que también puedes acceder a esta información desde Nushell utilizando el comando [`help`](/commands/docs/help.md).
