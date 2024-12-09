@@ -1,29 +1,30 @@
-# Programming in Nu
+# Programación en Nu
 
-This chapter goes into more detail of Nushell as a programming language.
-Each major language feature has its own section.
+Este capítulo profundiza en los detalles de Nushell como lenguaje de programación.  
+Cada característica principal del lenguaje tiene su propia sección.
 
-Just like most programming languages allow you to define functions, Nushell uses [custom commands](custom_commands.md) for this purpose.
+Al igual que la mayoría de los lenguajes de programación permiten definir funciones, Nushell utiliza [comandos personalizados](custom_commands.md) para este propósito.
 
-From other shells you might be used to [aliases](aliases.md).
-Nushell's aliases work in a similar way and are a part of the programming language, not just a shell feature.
+Si vienes de otros shells, tal vez estés acostumbrado a usar [alias](aliases.md).
+Los alias de Nushell funcionan de manera similar, pero son parte del lenguaje de programación y no solo una característica del shell.
 
-Common operations, such as addition or regex search, can be done with [operators](operators.md).
-Not all operations are supported for all data types, and Nushell will make sure to let you know when there is a mismatch.
+Las operaciones comunes, como la suma o la búsqueda con expresiones regulares (regex), se pueden realizar mediante [operadores](operators.md).
+No todas las operaciones son compatibles con todos los tipos de datos, y Nushell se encargará de informarte si hay una incompatibilidad.
 
-You can store intermediate results to [variables](variables.md).
-Variables can be immutable, mutable, or a parse-time constant.
+Puedes almacenar resultados intermedios en [variables](variables.md).
+Las variables pueden ser inmutables, mutables o constantes en tiempo de "parseo" (parse-time constant).
 
-The last three sections are aimed at organizing your code:
+Las últimas tres secciones están dirigidas a la organización de tu código:
 
-[Scripts](scripts.md) are the simplest form of code organization: You just put the code into a file and source it.
-However, you can also run scripts as standalone programs with command line signatures using the "special" `main` command.
+[Scripts](scripts.md) son la forma más sencilla de organizar el código: simplemente coloca el código en un archivo y lo cargas.
+Además, puedes ejecutar scripts como programas independientes con firmas de línea de comandos usando el comando "especial" `main`.
 
-With [modules](modules.md), just like in many other programming languages, it is possible to compose your code from smaller pieces.
-Modules let you define a public interface vs. private commands and you can import custom commands, aliases, and environment variables from them.
+Con los [módulos](modules.md), al igual que en muchos otros lenguajes de programación, es posible componer tu código a partir de piezas más pequeñas.  
+Los módulos te permiten definir una interfaz pública frente a comandos privados, e importar comandos personalizados, alias y variables de entorno desde ellos.
 
-[Overlays](overlays.md) build on top of modules.
-By defining an overlay, you bring in module's definitions into its own swappable "layer" that gets applied on top of other overlays.
-This enables features like activating virtual environments or overriding sets of default commands with custom variants.
 
-The standard library also has a [testing framework](testing.md) if you want to prove your reusable code works perfectly.
+Los [Overlays](overlays.md) se construyen (build) sobre los módulos.
+Definir un overlay permite introducir las definiciones del módulo en su propia "capa" (layer) intercambiable que se aplica encima de otros overlays.
+Esto habilita características como activar entornos virtuales o sobrescribir conjuntos de comandos predeterminados con variantes personalizadas.
+
+La biblioteca estándar también incluye un [framework de pruebas](testing.md) si deseas comprobar que tu código reutilizable funcione perfectamente.
