@@ -1,28 +1,29 @@
-# Nu as a Shell
+# Nu como Shell
 
-The [Nu Fundamentals](nu_fundamentals.md) and [Programming in Nu](programming_in_nu.md) chapter focused mostly on the language aspects of Nushell.
-This chapter sheds the light on the parts of Nushell that are related to the Nushell interpreter (the Nushell [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop)).
-Some of the concepts are directly a part of the Nushell programming language (such as environment variables) while others are implemented purely to enhance the interactive experience (such as hooks) and thus are not present when, for example, running a script.
+Los capítulos de [Fundamentos de Nu](nu_fundamentals.md) y [Programación en Nu](programming_in_nu.md) se centraron principalmente en los aspectos del lenguaje de Nushell.
 
-Many parameters of Nushell can be [configured](configuration.md).
-The config itself is stored as an environment variable.
-Furthermore, Nushell has several different configuration files that are run on startup where you can put custom commands, aliases, etc.
+Este capítulo arroja luz sobre las partes de Nushell relacionadas con su intérprete ([REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) de Nushell).
+Algunos conceptos forman parte directamente del lenguaje de programación de Nushell (como las variables de entorno), mientras que otros están implementados únicamente para mejorar la experiencia interactiva (como los hooks), y, por lo tanto, no están presentes al ejecutar un script.
 
-A big feature of any shell are [environment variables](environment.md).
-In Nushell, environment variables are scoped and can have any type supported by Nushell.
-This brings in some additional design considerations so please refer to the linked section for more details.
+Muchos parámetros de Nushell pueden ser [configurados](configuration.md).
+La configuración en sí misma se almacena como una variable de entorno (environment variable).
+Además, Nushell tiene varios archivos de configuración que se ejecutan al inicio, donde puedes colocar comandos personalizados, alias, etc.
 
-The other sections explain how to work with [stdout, stderr and exit codes](stdout_stderr_exit_codes.md), how to [escape a command call to the external command call](escaping.md), and how to [configure 3rd party prompts](3rdpartyprompts.md) to work with Nushell.
+Una característica destacada de cualquier shell son las [variables de entorno](environment.md).
+En Nushell, estas variables tienen un ámbito definido y pueden tener cualquier tipo compatible con Nushell.
+Esto introduce consideraciones adicionales de diseño, por lo que se recomienda consultar la sección vinculada para más detalles.
 
-An interesting feature of Nushell is [shells](shells_in_shells.md) which let you work in multiple directories simultaneously.
+Otras secciones explican cómo trabajar con [stdout, stderr y códigos de salida (exit codes)](stdout_stderr_exit_codes.md), cómo [escapar una llamada de comando a una llamada externa](escaping.md) (escape a command call to the external command call), y cómo [configurar prompts de terceros](3rdpartyprompts.md) para que funcionen con Nushell.
 
-Nushell also has its own line editor [Reedline](line_editor.md).
-With Nushell's config, it is possible to configure some of the Reedline's features, such as the prompt, keybindings, history, or menus.
+Una característica interesante de Nushell son las [shells](shells_in_shells.md), que te permiten trabajar en múltiples directorios simultáneamente.
 
-It is also possible to define [custom signatures for external commands](externs.md) which lets you define [custom completions](custom_completions.md) for them (the custom completions work also for Nushell custom commands).
+Nushell también tiene su propio editor de línea, [Reedline](line_editor.md).
+Con la configuración de Nushell, es posible ajustar características de Reedline, como el prompt, las combinaciones de teclas, el historial o los menús.
 
-[Coloring and Theming in Nu](coloring_and_theming.md) goes into more detail about how to configure Nushell's appearance.
+También es posible definir [firmas (signatures) personalizadas para comandos externos](externs.md), lo que permite crear [autocompletados personalizados](custom_completions.md) para ellos (los autocompletados personalizados también funcionan para los comandos personalizados de Nushell).
 
-If you want to schedule some commands to run in the background, [Background task in Nu](background_task.md) provide a simple guideline for you to follow.
+La sección [Colores y Temas en Nu](coloring_and_theming.md) detalla cómo configurar la apariencia de Nushell.
 
-And finally, [hooks](hooks.md) allow you to insert fragments of Nushell code to run at certain events.
+Si deseas programar algunos comandos para ejecutarse en segundo plano, la sección de [Tareas en segundo plano en Nu](background_task.md) proporciona una guía simple para seguir.
+
+Finalmente, los [hooks](hooks.md) te permiten insertar fragmentos de código de Nushell para que se ejecuten en ciertos eventos.
