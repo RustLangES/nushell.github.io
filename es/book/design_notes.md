@@ -1,7 +1,7 @@
-# Design Notes
+# Notas de Diseño
 
-This chapter intends to give more in-depth overview of certain aspects of Nushell's design. The topics are not necessary for a basic usage, but reading them will help you understand how Nushell works and why.
+Este capítulo tiene como objetivo proporcionar una visión más detallada de ciertos aspectos del diseño de Nushell. Los temas aquí tratados no son necesarios para un uso básico, pero leerlos te ayudará a comprender cómo funciona Nushell y por qué.
 
-We intend to expand this chapter in the future. If there is some topic that you find confusing and hard to understand, let us know. It might be a good candidate for a page here.
+Nuestro objetivo es ampliar este capítulo en el futuro. Si hay algún tema que encuentres confuso o difícil de entender, háznoslo saber. Podría ser un buen candidato para incluirlo en esta sección.
 
-[How Nushell Code Gets Run](how_nushell_code_gets_run.md) explains what happens when you run Nushell source code. It explains how Nushell is in many ways closer to classic compiled languages, like C or Rust, than to other shells and dynamic languages and hopefully clears some confusion that stems from that.
+[Cómo se ejecuta el código de Nushell](how_nushell_code_gets_run.md) explica lo que ocurre cuando se ejecuta código fuente de Nushell. Explica cómo Nushell, en muchos aspectos, se asemeja más a lenguajes compilados clásicos, como C o Rust, que a otros shells o lenguajes dinámicos, y pretende aclarar posibles confusiones derivadas de esto.
