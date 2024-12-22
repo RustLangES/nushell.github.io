@@ -2,7 +2,7 @@
 
 Los capítulos de [Fundamentos de Nu](nu_fundamentals.md) y [Programación en Nu](programming_in_nu.md) se centraron principalmente en los aspectos del lenguaje de Nushell.
 
-Este capítulo arroja luz sobre las partes de Nushell relacionadas con su intérprete ([REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) de Nushell).
+Este capítulo te dará idea sobre las partes de Nushell relacionadas con su intérprete ([REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) de Nushell).
 Algunos conceptos forman parte directamente del lenguaje de programación de Nushell (como las variables de entorno), mientras que otros están implementados únicamente para mejorar la experiencia interactiva (como los hooks), y, por lo tanto, no están presentes al ejecutar un script.
 
 Muchos parámetros de Nushell pueden ser [configurados](configuration.md).
