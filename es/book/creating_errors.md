@@ -28,7 +28,7 @@ def my-command [x] {
         msg: "this is fishy",
         label: {
             text: "fish right here",
-            span: (metadata $x).span
+            span: $span
         }
     }
 }
@@ -37,13 +37,12 @@ def my-command [x] {
 When called with a value, we'll now see an error message returned:
 
 ```nu
-> my-command 100
-
-Error:
-  × this is fishy
-   ╭─[entry #5:1:1]
- 1 │ my-command 100
-   ·            ─┬─
-   ·             ╰── fish right here
-   ╰────
+my-command 100
+# => Error:
+# =>   × this is fishy
+# =>    ╭─[entry #5:1:1]
+# =>  1 │ my-command 100
+# =>    ·            ─┬─
+# =>    ·             ╰── fish right here
+# =>    ╰────
 ```
