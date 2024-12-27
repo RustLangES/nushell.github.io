@@ -24,8 +24,8 @@
 - [Scripts](scripts.md) - Creating your own scripts
 - [Metadata](metadata.md) - An explanation of Nu's metadata system
 - [Creating your own errors](creating_errors.md) - Creating your own error messages
-- [Shells](shells_in_shells.md) - Working with multiple locations
-- [Escaping commands](escaping.md) - Escaping to native commands of the same name
+- [Directory Stack](directory_stack.md) - Working with multiple locations
+- [Running External (System) Commands](./running_externals.md) - Running external commands with a naming conflict
 - [Plugins](plugins.md) - Enhancing Nushell with more features using plugins
 - [Parallelism](parallelism.md) - Running your code in parallel
 - [Line editor](line_editor.md) - Nushell's line editor
