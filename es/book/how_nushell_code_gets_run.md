@@ -1,18 +1,18 @@
-# How Nushell Code Gets Run
+# Cómo se ejecuta el código Nushell
 
-In [Thinking in Nu](./thinking_in_nu.md#think-of-nushell-as-a-compiled-language), we encouraged you to _"Think of Nushell as a compiled language"_ due to the way in which Nushell code is processed. We also covered several code examples that won't work in Nushell due that process.
+En [Pensando en Nu](./thinking_in_nu.md#think-of-nushell-as-a-compiled-language), te animamos a _"pensar en Nushell como un lenguaje compilado"_ debido a cómo se procesa el código de Nushell. También cubrimos varios ejemplos de código que no funcionan en Nushell debido a ese proceso.
 
-The underlying reason for this is a strict separation of the **_parsing and evaluation_** stages that **_disallows `eval`-like functionality_**. In this section, we'll explain in detail what this means, why we're doing it, and what the implications are. The explanation aims to be as simple as possible, but it might help if you've programmed in another language before.
+La razón subyacente es una estricta separación de las etapas de **_análisis y evaluación (parsing and evaluation)_**, lo que **_impide la funcionalidad tipo `eval`_**. En esta sección, explicaremos en detalle qué significa esto, por qué lo hacemos y cuáles son las implicaciones. La explicación busca ser lo más sencilla posible, pero podría ayudarte haber programado en otro lenguaje antes.
 
 [[toc]]
 
-## Interpreted vs. Compiled Languages
+## Lenguajes interpretados vs compilados
 
-### Interpreted Languages
+### Lenguajes interpretados
 
-Nushell, Python, and Bash (and many others) are _"interpreted"_ languages.
+Nushell, Python y Bash (entre muchos otros) son lenguajes _"interpretados"_.
 
-Let's start with a simple "Hello, World!" Nushell program:
+Comencemos con un simple programa de Nushell que muestra "Hello, World!" (¡Hola, Mundo!):
 
 ```nu
 # hello.nu
@@ -20,26 +20,26 @@ Let's start with a simple "Hello, World!" Nushell program:
 print "Hello, World!"
 ```
 
-Of course, this runs as expected using `nu hello.nu`. A similar program written in Python or Bash would look (and behave) nearly the same.
+Por supuesto, esto se ejecuta como se espera usando `nu hello.nu`. Un programa similar escrito en Python o Bash se vería (y se comportaría) casi igual.
 
-In _"interpreted languages"_ code usually gets handled something like this:
+En lenguajes _"interpretados"_ el código generalmente se maneja de la siguiente manera:
 
 ```
-Source Code → Interpreter → Result
+Código fuente (Source Code) → Intérprete (Interpreter) → Resultado (Result)
 ```
 
-Nushell follows this pattern, and its "Interpreter" is split into two parts:
+Nushell sigue este patrón, y su "intérprete" se divide en dos partes:
 
-1. `Source Code → Parser → Intermediate Representation (IR)`
-2. `IR → Evaluation Engine → Result`
+1. `Código fuente → Analizador (Parser) → Representación Intermedia (Intermediate Representations - IR)`
+2. `IR → Motor de evaluación (Evaluation Engine) → Resultado`
 
-First, the source code is analyzed by the Parser and converted into an intermediate representation (IR), which in Nushell's case is just a collection of data structures. Then, these data structures are passed to the Engine for evaluation and output of the results.
+Primero, el código fuente es analizado por el Parser y convertido en una representación intermedia (IR), que en el caso de Nushell es simplemente una colección de estructuras de datos. Luego, estas estructuras se pasan al motor (Engine) para su evaluación y salida de resultados.
 
-This, as well, is common in interpreted languages. For example, Python's source code is typically [converted into bytecode](https://github.com/python/cpython/blob/main/InternalDocs/interpreter.md) before evaluation.
+Esto, también, es común en los lenguajes interpretados. Por ejemplo, el código fuente de Python generalmente se [convierte en bytecode](https://github.com/python/cpython/blob/main/InternalDocs/interpreter.md) antes de la evaluación.
 
-### Compiled Languages
+### Lenguajes compilados
 
-On the other side are languages that are typically "compiled", such as C, C++, or Rust. For example, here's a simple _"Hello, World!"_ in Rust:
+Por otro lado,  están los lenguajes típicamente «compilados», como C, C++ o Rust. Por ejemplo, aquí hay un simple _"Hello, World!"_ en Rust:
 
 ```rust
 // main.rs
@@ -49,46 +49,46 @@ fn main() {
 }
 ```
 
-To "run" this code, it must be:
+Para "ejecutar" este código, debe ser:
 
-1. Compiled into [machine code instructions](https://en.wikipedia.org/wiki/Machine_code)
-2. The compilation results stored as a binary file one the disk
+1. Compilado en [instrucciones de código máquina](https://en.wikipedia.org/wiki/Machine_code)
+2. Los resultados de la compilación almacenados como un archivo binario en el disco
 
-The first two steps are handled with `rustc main.rs`.
+Los primeros dos pasos se manejan con `rustc main.rs`.
 
-3. Then, to produce a result, you need to run the binary (`./main`), which passes the instructions to the CPU
+3. Luego, para producir un resultado, necesitas ejecutar el binario (`./main`), que pasa las instrucciones a la CPU.
 
-So:
+Entonces:
 
-1. `Source Code ⇒ Compiler ⇒ Machine Code`
-2. `Machine Code ⇒ CPU ⇒ Result`
+1. `Código fuente ⇒ Compilador ⇒ Código máquina` (Source Code ⇒ Compiler ⇒ Machine Code)
+2. `Código máquina ⇒ CPU ⇒ Resultado` (Machine Code ⇒ CPU ⇒ Result)
 
 ::: important
-You can see that the compile-run sequence is not much different from the parse-evaluate sequence of an interpreter. You begin with source code, parse (or compile) it into some state (e.g., bytecode, IR, machine code), then evaluate (or run) the IR to get a result. You could think of machine code as just another type of IR and the CPU as its interpreter.
+Puedes ver que la secuencia compilar-ejecutar (compile-run) no es muy diferente de la secuencia analizar-evaluar (parse-evaluate) de un intérprete. Comienzas con código fuente, lo analizas "parseas" (o compilas) en algún estado (p. ej., bytecode, IR, código máquina), luego evalúas (o ejecutas) el IR para obtener un resultado. Podrías pensar en el código máquina como otro tipo de IR y en la CPU como su intérprete.
 
-One big difference, however, between interpreted and compiled languages is that interpreted languages typically implement an _`eval` function_ while compiled languages do not. What does this mean?
+Una gran diferencia, sin embargo, entre los lenguajes interpretados y compilados es que los lenguajes interpretados generalmente implementan una función _`eval`_, mientras que los lenguajes compilados no. ¿Qué significa esto?
 :::
 
-## Dynamic vs. Static Languages
+## Lenguajes dinámicos vs estáticos
 
-::: tip Terminology
-In general, the difference between a dynamic and static language is how much of the source code is resolved during Compilation (or Parsing) vs. Evaluation/Runtime:
+::: tip Terminología
+En general, la diferencia entre un lenguaje dinámico y uno estático es cuánta parte del código fuente se resuelve durante la compilación (o análisis -parsing-) vs. la evaluación/ejecución (Evaluation/Runtime):
 
-- _"Static"_ languages perform more code analysis (e.g., type-checking, [data ownership](https://doc.rust-lang.org/stable/book/ch04-00-understanding-ownership.html)) during Compilation/Parsing.
+- Los lenguajes _"estáticos"_ realizan más análisis de código (p. ej., verificación de tipos (type-checking), [propiedad de los datos (data ownership)](https://doc.rust-lang.org/stable/book/ch04-00-understanding-ownership.html)) durante la compilación/análisis (Compilation/Parsing).
 
-- _"Dynamic"_ languages perform more code analysis, including `eval` of additional code, during Evaluation/Runtime.
+- Los lenguajes _"dinámicos"_ realizan más análisis de código, incluyendo `eval` de código adicional, durante la evaluación/ejecución (Evaluation/Runtime).
 
-For the purposes of this discussion, the primary difference between a static and dynamic language is whether or not it has an `eval` function.
+Para los propósitos de esta discusión, la principal diferencia entre un lenguaje estático y dinámico es si tiene o no una función `eval`.
 
 :::
 
-### Eval Function
+### Función Eval
 
-Most dynamic, interpreted languages have an `eval` function. For example, [Python `eval`](https://docs.python.org/3/library/functions.html#eval) (also, [Python `exec`](https://docs.python.org/3/library/functions.html#exec)) or [Bash `eval`](https://linux.die.net/man/1/bash).
+La mayoría de los lenguajes dinámicos e interpretados tienen una función `eval`. Por ejemplo, [Python `eval`](https://docs.python.org/3/library/functions.html#eval) (también, [Python `exec`](https://docs.python.org/3/library/functions.html#exec)) o [Bash `eval`](https://linux.die.net/man/1/bash).
 
-The argument to an `eval` is _"source code inside of source code"_, typically conditionally or dynamically computed. This means that, when an interpreted language encounters an `eval` in source code during Parse/Eval, it typically interrupts the normal Evaluation process to start a new Parse/Eval on the source code argument to the `eval`.
+El argumento de un `eval` es _«código fuente dentro de código fuente»_, normalmente ejecutado de forma condicional o dinámica. Esto significa que, cuando un lenguaje interpretado encuentra un `eval` en el código fuente durante Parse/Eval (analizar/evaluar), normalmente interrumpe el proceso normal de Evaluación para iniciar un nuevo Parse/Eval en el argumento del código fuente del `eval`.
 
-Here's a simple Python `eval` example to demonstrate this (potentially confusing!) concept:
+Aquí hay un simple ejemplo de Python `eval` para demostrar este concepto (¡potencialmente confuso!):
 
 ```python:line-numbers
 # hello_eval.py
@@ -97,33 +97,33 @@ print("Hello, World!")
 eval("print('Hello, Eval!')")
 ```
 
-When you run the file (`python hello_eval.py`), you'll see two messages: _"Hello, World!"_ and _"Hello, Eval!"_. Here is what happens:
+Cuando ejecutas el archivo (`python hello_eval.py`), verás dos mensajes: _"Hello, World!"_ y _"Hello, Eval!_. Aquí está lo que sucede:
 
-1. The entire program is Parsed
-2. (Line 3) `print("Hello, World!")` is Evaluated
-3. (Line 4) In order to evaluate `eval("print('Hello, Eval!')")`:
-   1. `print('Hello, Eval!')` is Parsed
-   2. `print('Hello, Eval!')` is Evaluated
+1. Todo el programa es analizado (Parsed).
+2. (Línea 3) Se evalúa `print("¡Hola, Mundo!")`.
+3. (Línea 4) Para evaluar `eval("print('Hello, Eval!')")`:
+   1. `print('Hello, Eval!')` se analiza (Parsed).
+   2. `print('Hello, Eval!')` se evalúa. (Evaluated)
 
-::: tip More fun
-Consider `eval("eval(\"print('Hello, Eval!')\")")` and so on!
+::: tip Más diversión
+Considera `eval("eval(\"print('Hello, Eval!')\")")` ¡y así sucesivamente!
 :::
 
-Notice how the use of `eval` here adds a new "meta" step into the execution process. Instead of a single Parse/Eval, the `eval` creates additional, "recursive" Parse/Eval steps instead. This means that the bytecode produced by the Python interpreter can be further modified during the evaluation.
+Observe cómo el uso de `eval` aquí añade un nuevo paso «meta» en el proceso de ejecución. En lugar de un único Parse/Eval, `eval` crea pasos Parse/Eval «recursivos» adicionales. Esto significa que el bytecode producido por el intérprete de Python puede ser modificado durante la evaluación.
 
-Nushell does not allow this.
+Nushell no lo permite.
 
-As mentioned above, without an `eval` function to modify the bytecode during the interpretation process, there's very little difference (at a high level) between the Parse/Eval process of an interpreted language and that of the Compile/Run in compiled languages like C++ and Rust.
+Como se mencionó anteriormente, sin una función `eval` para modificar el bytecode durante el proceso de interpretación, hay muy poca diferencia (a un alto nivel) entre el proceso Parse/Eval de un lenguaje interpretado y el Compile/Run en lenguajes compilados como C++ y Rust.
 
-::: tip Takeaway
-This is why we recommend that you _"think of Nushell as a compiled language"_. Despite being an interpreted language, its lack of `eval` gives it some of the characteristic benefits as well as limitations common in traditional static, compiled languages.
+::: tip Idea clave
+Por eso recomendamos que _"pienses en Nushell como un lenguaje compilado"_. A pesar de ser un lenguaje interpretado, su falta de `eval` le da algunas de las ventajas características, así como limitaciones, comunes en los lenguajes compilados estáticos tradicionales.
 :::
 
-We'll dig deeper into what it means in the next section.
+Profundizaremos en su significado en la próxima sección.
 
-## Implications
+## Implicaciones
 
-Consider this Python example:
+Considera este ejemplo en Python:
 
 ```python:line-numbers
 exec("def hello(): print('Hello eval!')")
@@ -131,82 +131,82 @@ hello()
 ```
 
 ::: note
-We're using `exec` in this example instead of `eval` because it can execute any valid Python code rather than being limited to `eval` expressions. The principle is similar in both cases, though.
+En este ejemplo utilizamos `exec` en lugar de `eval` porque puede ejecutar cualquier código válido de Python, mientras que `eval` está limitado a expresiones. Sin embargo, el principio es similar en ambos casos.
 :::
 
-During interpretation:
+Durante la interpretación (interpretation):
 
-1. The entire program is Parsed
-2. In order to Evaluate Line 1:
-   1. `def hello(): print('Hello eval!')` is Parsed
-   2. `def hello(): print('Hello eval!')` is Evaluated
-3. (Line 2) `hello()` is evaluated.
+1. Todo el programa es Analizado. (Parsed)
+2. Para Evaluar (Evaluate) la Línea 1:
+   1. `def hello(): print('Hello eval!')` es Analizado (Parsed)
+   2. `def hello(): print('Hello eval!')` es Evaluado (Evaluated)
+3. (Línea 2) `hello()` es Evaluado (Evaluated).
 
-Note, that until step 2.2, the interpreter has no idea that a function `hello` even exists! This makes [static analysis](https://en.wikipedia.org/wiki/Static_program_analysis) of dynamic languages challenging. In this example, the existence of the `hello` function cannot be checked just by parsing (compiling) the source code. The interpreter must evaluate (run) the code to discover it.
+Observa que, hasta el paso 2.2, el intérprete no sabe que existe una función llamada `hello`. Esto hace que el [análisis estático](https://es.wikipedia.org/wiki/An%C3%A1lisis_est%C3%A1tico_de_programas) en lenguajes dinámicos sea un desafío. En este ejemplo, la existencia de la función `hello` no puede verificarse simplemente analizando (o compilando) el código fuente. El intérprete debe evaluar (ejecutar) el código para descubrirla.
 
-- In a static, compiled language, a missing function is guaranteed to be caught at compile-time.
-- In a dynamic, interpreted language, however, it becomes a _possible_ runtime error. If the `eval`-defined function is conditionally called, the error may not be discovered until that condition is met in production.
+- En un lenguaje estático y compilado, la ausencia de una función se detecta de manera garantizada en tiempo de compilación (compile-time).
+- Sin enbargo, en un lenguaje dinámico e interpretado, esto se convierte en un _posible_ error en tiempo de ejecución (runtime). Si la función definida mediante `eval` se llama condicionalmente, el error podría no descubrirse hasta que esa condición se cumpla en producción.
 
 ::: important
-In Nushell, there are **exactly two steps**:
+En Nushell, hay **exactamente dos pasos**:
 
-1. Parse the entire source code
-2. Evaluate the entire source code
+1. Analizar todo el código fuente. (Parse)
+2. Evaluar todo el código fuente. (Evaluate)
 
-This is the complete Parse/Eval sequence.
+Esta es la secuencia completa de Análisis/Evaluación (Parse/Eval).
 :::
 
-::: tip Takeaway
-By not allowing `eval`-like functionality, Nushell prevents these types of `eval`-related bugs. Calling a non-existent definition is guaranteed to be caught at parse-time in Nushell.
+::: tip Consejo
+Al no permitir funcionalidades similares a `eval`, Nushell previene estos tipos de errores relacionados con `eval`. Llamar a una definición inexistente se detecta de manera garantizada en tiempo de análisis (parse-time) en Nushell.
 
-Furthermore, after parsing completes, we can be certain the bytecode (IR) won't change during evaluation. This gives us a deep insight into the resulting bytecode (IR), allowing for powerful and reliable static analysis and IDE integration which can be challenging to achieve with more dynamic languages.
+Además, una vez completado el análisis sintáctico (parsing), podemos estar seguros de que el código de bytes (IR) no cambiará durante la evaluación. Esto nos da una visión profunda del código de bytes (IR) resultante, lo que permite un análisis estático potente y fiable y la integración IDE que puede ser difícil de lograr con lenguajes más dinámicos.
 
-In general, you have more peace of mind that errors will be caught earlier when scaling Nushell programs.
+En general, tiene más tranquilidad de que los errores se detectarán antes al escalar programas Nushell.
 :::
 
-## The Nushell REPL
+## El REPL de Nushell
 
-As with most any shell, Nushell has a _"Read→Eval→Print Loop"_ ([REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop)) that is started when you run `nu` without any file. This is often thought of, but isn't quite the same, as the _"commandline"_.
+Como en la mayoría de los shells, Nushell tiene un bucle de _"Leer→Evaluar→Imprimir"_ (Read→Eval→Print Loop) ([REPL](https://es.wikipedia.org/wiki/REPL)) que se inicia cuando ejecutas `nu` sin especificar un archivo. A menudo se piensa en esto como el _"prompt"_ de línea de comandos.
 
-::: tip Note
-In this section, the `> ` character at the beginning of a line in a code-block is used to represent the commandline **_prompt_**. For instance:
+::: tip Nota
+En esta sección, el carácter `> ` al inicio de una línea en un bloque de código representa el **_prompt_** del shell. Por ejemplo:
 
 ```nu
-> some code...
+> algún código...
 ```
 
-Code after the prompt in the following examples is executed by pressing the <kbd>Enter</kbd> key. For example:
+El código después del prompt se ejecuta presionando la tecla <kbd>Enter</kbd>. Por ejemplo:
 
 ```nu
 > print "Hello world!"
 # => Hello world!
 
 > ls
-# => prints files and directories...
+# => muestra archivos y directorios...
 ```
 
-The above means:
+Esto significa:
 
-- From inside Nushell (launched with `nu`):
-  1. Type `print "Hello world!"`
-  1. Press <kbd>Enter</kbd>
-  1. Nushell will display the result
-  1. Type `ls`
-  1. Press <kbd>Enter</kbd>
-  1. Nushell will display the result
+- Desde dentro de Nushell (iniciado con `nu`):
+  1. Escribe `print "Hello world!"`
+  1. Presiona <kbd>Enter</kbd>.
+  1. Nushell mostrará el resultado.
+  1. Escribe `ls`
+  1. Presiona <kbd>Enter</kbd>.
+  1. Nushell mostrará el resultado.
 
 :::
 
-When you press <kbd>Enter</kbd> after typing a commandline, Nushell:
+Cuando presionas <kbd>Enter</kbd> después de escribir un comando, Nushell:
 
-1. **_(Read):_** Reads the commandline input
-1. **_(Evaluate):_** Parses the commandline input
-1. **_(Evaluate):_** Evaluates the commandline input
-1. **_(Evaluate):_** Merges the environment (such as the current working directory) to the internal Nushell state
-1. **_(Print):_** Displays the results (if non-`null`)
-1. **_(Loop):_** Waits for another input
+1. **_(Leer -Read-):_** Lee la entrada de la línea de comandos.
+1. **_(Evaluar -Evaluate-):_** Analiza (Parse) la entrada de la línea de comandos. 
+1. **_(Evaluar -Evaluate-):_** Evalúa la entrada de la línea de comandos.
+1. **_(Evaluar -Evaluate-):_** Fusiona el entorno -environment- (como el directorio actual) con el estado interno de Nushell.
+1. **_(Imprimir -Print-):_** Muestra los resultados (si no son `null`).
+1. **_(Bucle -Loop-):_** Espera otra entrada.
 
-In other words, each REPL invocation is its own separate parse-evaluation sequence. By merging the environment back to the Nushell's state, we maintain continuity between the REPL invocations.
+En otras palabras, cada invocación del REPL es su propia secuencia independiente de análisis-evaluación (parse-evaluation). Al fusionar el entorno nuevamente en el estado de Nushell, se mantiene la continuidad entre las invocaciones del REPL.
 
 Compare a simplified version of the [`cd` example](./thinking_in_nu.md#example-change-to-a-different-directory-cd-and-source-a-file) from _"Thinking in Nu"_:
 
@@ -215,119 +215,122 @@ cd spam
 source-env foo.nu
 ```
 
-There we saw that this cannot work (as a script or other single expression) because the directory will be changed _after_ the parse-time [`source-env` keyword](/commands/docs/source-env.md) attempts to read the file.
+Vimos que esto no puede funcionar (como script u otra expresión única) porque el cambio de directorio ocurre _después_ de que la palabra clave [`source-env`](/commands/docs/source-env.md) intente leer el archivo en tiempo de análisis (parse-time).
 
-Running these commands as separate REPL entries, however, works:
+Sin embargo, ejecutar estos comandos como entradas separadas en el REPL sí funciona:
 
 ```nu
 > cd spam
 > source-env foo.nu
-# Yay, works!
+# Yay, ¡Funciona!
 ```
 
-To see why, let's break down what happens in the example:
+Para entender por qué, analicemos qué sucede en el ejemplo:
 
-1. Read the `cd spam` commandline.
-2. Parse the `cd spam` commandline.
-3. Evaluate the `cd spam` commandline.
-4. Merge environment (including the current directory) into the Nushell state.
-5. Read and Parse `source-env foo.nu`.
-6. Evaluate `source-env foo.nu`.
-7. Merge environment (including any changes from `foo.nu`) into the Nushell state.
+1. Lee el comando `cd spam`.
+2. Analiza (parse) el comando `cd spam`.
+3. Evalúa el comando `cd spam`.
+4. Fusiona (merge) el entorno (incluido el directorio actual) en el estado de Nushell.
+5. Lee y analiza (parse) `source-env foo.nu`.
+6. Evalúa `source-env foo.nu`.
+7. Fusiona (merge) el entorno (incluidos los cambios realizados por `foo.nu`) en el estado de Nushell.
 
-When `source-env` tries to open `foo.nu` during the parsing in Step 5, it can do so because the directory change from Step 3 was merged into the Nushell state during Step 4. As a result, it's visible in the following Parse/Eval cycles.
+Cuando `source-env` intenta abrir `foo.nu` durante el análisis (parsing) en el Paso 5, puede hacerlo porque el cambio de directorio del Paso 3 se fusionó con el estado de Nushell en el Paso 4. Por lo tanto, es visible en los siguientes ciclos de Análisis/Evaluación (Parse/Eval).
 
-### Multiline REPL Commandlines
+### Líneas de comando multilínea en el REPL (Multiline REPL Commandlines)
 
-Keep in mind that this only works for **_separate_** commandlines.
+Ten en cuenta que esto solo funciona para líneas de comando **_separadas_**.
 
-In Nushell, it's possible to group multiple commands into one commandline using:
+En Nushell, es posible agrupar múltiples comandos en una sola línea de comando usando:
 
-- A semicolon:
+- Un punto y coma:
 
   ```nu
   cd spam; source-env foo.nu
   ```
 
-- A newline:
+- Una nueva línea:
 
   ```
   > cd span
     source-env foo.nu
   ```
 
-  Notice there is no "prompt" before the second line. This type of multiline commandline is usually created with a [keybinding](./line_editor.md#keybindings) to insert a Newline when <kbd>Alt</kbd>+<kbd>Enter</kbd> or <kbd>Shift</kbd>+ <kbd>Enter</kbd> is pressed.
+  Nota que no hay un "prompt" antes de la segunda línea. Este tipo de línea de comando multilínea generalmente se crea con una [asignación de teclas (keybinding)](./line_editor.md#keybindings) para insertar una nueva línea al presionar <kbd>Alt</kbd>+<kbd>Enter</kbd> o <kbd>Shift</kbd>+<kbd>Enter</kbd>.
 
-These two examples behave exactly the same in the Nushell REPL. The entire commandline (both statements) are processed a single Read→Eval→Print Loop. As such, they will fail the same way that the earlier script-example did.
+Ambos ejemplos se comportan exactamente igual en el REPL de Nushell. Toda la línea de comando (ambas instrucciones) se procesan en un solo ciclo de _Leer→Evaluar→Imprimir_ (Read→Eval→Print Loop). Por lo tanto, fallarán de la misma manera que el ejemplo anterior con el script.
+
 
 ::: tip
-Multiline commandlines are very useful in Nushell, but watch out for any out-of-order Parser-keywords.
+Las líneas de comando multilínea son muy útiles en Nushell, pero presta atención a palabras clave del Parser que estén fuera de orden.
 :::
 
-## Parse-time Constant Evaluation
+## Evaluación constante en tiempo de análisis (Parse-time Constant Evaluation)
 
-While it is impossible to add parsing into the evaluation stage and yet still maintain our static-language benefits, we can safely add _a little bit_ of evaluation into parsing.
+Si bien es imposible añadir análisis (parsing) en la etapa de evaluación y aún mantener los beneficios de un lenguaje estático, es seguro añadir _un poco_ de evaluación al análisis.
 
-::: tip Terminology
+::: tip Terminología
 In the text below, we use the term _"constant"_ to refer to:
+En el texto siguiente, usamos el término _"constante"_ (constant) para referirnos a:
 
-- A `const` definition
-- The result of any command that outputs a constant value when provide constant inputs.
+- Una definición `const`.
+- El resultado de cualquier comando que produzca un valor constante cuando se le proporcionan entradas constantes.
   :::
 
-By their nature, **_constants_** and constant values are known at Parse-time. This, of course, is in sharp contrast to _variable_ declarations and values.
+Por su naturaleza, las **_constantes_** y sus valores son conocidos en tiempo de análisis (parse-time). Esto contrasta fuertemente con las declaraciones y valores de _variables_.
 
-As a result, we can utilize constants as safe, known arguments to parse-time keywords like [`source`](/commands/docs/source.md), [`use`](/commands/docs/use.md), and related commands.
+Como resultado, podemos utilizar constantes como argumentos seguros y conocidos para palabras clave del tiempo de analisis (parse-time keywords), como [`source`](/commands/docs/source.md), [`use`](/commands/docs/use.md) y comandos relacionados.
 
-Consider [this example](./thinking_in_nu.md#example-dynamically-creating-a-filename-to-be-sourced) from _"Thinking in Nu"_:
+Considera [este ejemplo](./thinking_in_nu.md#example-dynamically-creating-a-filename-to-be-sourced) de _"Thinking in Nu"_:
 
 ```nu
 let my_path = "~/nushell-files"
 source $"($my_path)/common.nu"
 ```
 
-As noted there, we **_can_**, however, do the following instead:
+Sin embargo, podemos hacer lo siguiente en su lugar:
 
 ```nu:line-numbers
 const my_path = "~/nushell-files"
 source $"($my_path)/common.nu"
 ```
 
-Let's analyze the Parse/Eval process for this version:
+Analicemos el proceso de análisis y evaluación (Parse/Eval) para esta versión:
 
-1. The entire program is Parsed into IR.
+1. Todo el programa se analiza (Parse) en IR:
 
-   1. Line 1: The `const` definition is parsed. Because it is a constant assignment (and `const` is also a parser-keyword), that assignment can also be Evaluated at this stage. Its name and value are stored by the Parser.
-   2. Line 2: The `source` command is parsed. Because `source` is also a parser-keyword, it is Evaluated at this stage. In this example, however, it can be **_successfully_** parsed since its argument is **_known_** and can be retrieved at this point.
-   3. The source-code of `~/nushell-files/common.nu` is parsed. If it is invalid, then an error will be generated, otherwise the IR results will be included in evaluation in the next stage.
+   1. Línea 1: La definición de `const` se analiza (parsed). Como es una asignación constante (y `const` también es una palabra clave del parser), esa asignación también se evalúa en esta etapa. Su nombre y valor se almacenan en el Parser.   
+   2. Línea 2: El comando `source` se analiza (parsed). Dado que `source` es también una palabra clave del Parser, se evalúa en esta etapa. En este ejemplo, se puede analizar (parsed) correctamente ya que su argumento es **_conocido_** y puede recuperarse en este punto.
+   3. El código fuente de `~/nushell-files/common.nu` se analiza (parsed). Si es inválido, se generará un error; de lo contrario, los resultados de IR se incluirán en la evaluación en la siguiente etapa.
 
-2. The entire IR is Evaluated:
-   1. Line 1: The `const` definition is Evaluated. The variable is added to the runtime stack.
-   2. Line 2: The IR result from parsing `~/nushell-files/common.nu` is Evaluated.
+2. Todo el IR se evalúa:
+   1. Línea 1: La definición de `const` se evalúa. La variable se agrega a la pila en tiempo de ejecución (runtime stack).
+   2. Línea 2: El resultado de IR del análisis (parsing) de `~/nushell-files/common.nu` se evalúa (Evaluated).
 
-::: important
+::: important Importante
 
-- An `eval` adds additional parsing during evaluation
-- Parse-time constants do the opposite, adding additional evaluation to the parser.
+- Un `eval` añade análisis adicional (additional parsing) durante la evaluación.
+- Las constantes en tiempo de análisis (Parse-time) hacen lo opuesto: añaden evaluación adicional al parser.
   :::
 
-Also keep in mind that the evaluation allowed during parsing is **_very restricted_**. It is limited to only a small subset of what is allowed during a regular evaluation.
+Ten en cuenta que la evaluación permitida durante el análisis es **_muy restringida_**. Está limitada a un pequeño subconjunto de lo permitido durante una evaluación normal.
 
-For example, the following is not allowed:
+Por ejemplo, lo siguiente no está permitido:
 
 ```nu
 const foo_contents = (open foo.nu)
 ```
 
 Put differently, only a small subset of commands and expressions can generate a constant value. For a command to be allowed:
+En otras palabras, solo un pequeño subconjunto de comandos y expresiones puede generar un valor constante. Para que un comando sea permitido:
 
-- It must be designed to output a constant value
-- All of its inputs must also be constant values, literals, or composite types (e.g., records, lists, tables) of literals.
+- Debe estar diseñado para producir un valor constante.
+- Todas sus entradas también deben ser valores constantes, literales o tipos compuestos (como registros (records), listas o tablas) de literales.
 
-In general, the commands and resulting expressions will be fairly simple and **_without side effects_**. Otherwise, the parser could all-too-easily enter an unrecoverable state. Imagine, for instance, attempting to assign an infinite stream to a constant. The Parse stage would never complete!
+En general, los comandos y expresiones resultantes serán bastante simples y **_sin efectos secundarios_**(side effects). De lo contrario, el parser podría entrar fácilmente en un estado irrecuperable. Imagina, por ejemplo, intentar asignar un flujo infinito a una constante. ¡La etapa de análisis (Parse stage) nunca terminaría!
 
 ::: tip
-You can see which Nushell commands can return constant values using:
+Puedes ver qué comandos de Nushell pueden devolver valores constantes usando:
 
 ```nu
 help commands | where is_const
@@ -335,33 +338,33 @@ help commands | where is_const
 
 :::
 
-For example, the `path join` command can output a constant value. Nushell also defines several useful paths in the `$nu` constant record. These can be combined to create useful parse-time constant evaluations like:
+Por ejemplo, el comando `path join` puede producir un valor constante. Nushell también define varias rutas útiles en el registro (record) constante `$nu`. Estas pueden combinarse para crear evaluaciones constantes en tiempo de análisis (parse-time) como:
 
 ```nu
 const my_startup_modules =  $nu.default-config-dir | path join "my-mods"
 use $"($my_startup_modules)/my-utils.nu"
 ```
 
-::: note Additional Notes
-Compiled ("static") languages also tend to have a way to convey some logic at compile time. For instance:
+::: note Notas adicionales
+Los lenguajes compilados ("estáticos") también suelen tener formas de transmitir cierta lógica en tiempo de compilación. Por ejemplo:
 
-- C's preprocessor
-- Rust macros
-- [Zig's comptime](https://kristoff.it/blog/what-is-zig-comptime), which was an inspiration for Nushell's parse-time constant evaluation.
+- El preprocesador de C
+- Macros de Rust
+- [El `comptime` de Zig](https://kristoff.it/blog/what-is-zig-comptime),  sirvió de inspiración para la evaluación de constantes en tiempo de análisis sintáctico (parte-time) de Nushell.
 
-There are two reasons for this:
+Existen dos razones para esto:
 
-1. _Increasing Runtime Performance:_ Logic in the compilation stage doesn't need to be repeated during runtime.
+1. _Aumentar el rendimiento en tiempo de ejecución (Runtime):_ La lógica en la etapa de compilación no necesita repetirse durante la ejecución.
 
-   This isn't currently applicable to Nushell, since the parsed results (IR) are not stored beyond Evaluation. However, this has certainly been considered as a possible future feature.
+   Esto actualmente no aplica a Nushell, ya que los resultados analizados (IR) no se almacenan más allá de la Evaluación. Sin embargo, esto se ha considerado como una posible función futura.
 
-2. As with Nushell's parse-time constant evaluations, these features help (safely) work around limitations caused by the absence of an `eval` function.
+2. Al igual que con las evaluaciones constantes en tiempo de análisis (parse-time) de Nushell, estas características ayudan (de manera segura -safely-) a superar limitaciones causadas por la ausencia de una función `eval`.
    :::
 
-## Conclusion
+## Conclusión
 
-Nushell operates in a scripting language space typically dominated by _"dynamic"_, _"interpreted"_ languages, such as Python, Bash, Zsh, Fish, and many others. Nushell is also _"interpreted"_ since code is run immediately (without a separate, manual compilation).
+Nushell opera en el espacio de los lenguajes de scripting típicamente dominados por lenguajes _"dinámicos"_ e _"interpretados"_, como Python, Bash, Zsh, Fish y muchos otros. Nushell también es _"interpretado"_ porque el código se ejecuta inmediatamente (sin una compilación manual separada).
 
-However, is not _"dynamic"_ in that it does not have an `eval` construct. In this respect, it shares more in common with _"static"_, compiled languages like Rust or Zig.
+Sin embargo, no es _"dinámico"_ porque no tiene una construcción `eval` (eval construct). En este sentido, comparte más similitudes con lenguajes _"estáticos"_ y compilados como Rust o Zig.
 
-This lack of `eval` is often surprising to many new users and is why it can be helpful to think of Nushell as a compiled, and static, language.
+Esta falta de `eval` suele sorprender a muchos usuarios nuevos, y por ello puede ser útil pensar en Nushell como un lenguaje compilado y estático.
